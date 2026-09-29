@@ -36,7 +36,7 @@
 | `detector.fp16.onnx` | [ogkalu/comic-text-and-bubble-detector](https://huggingface.co/ogkalu/comic-text-and-bubble-detector)（RT-DETR-v2 r50vd） | Apache License 2.0 |
 | `ocr-*.fp16.onnx`、`vocab.txt` | [kha-white/manga-ocr-base](https://huggingface.co/kha-white/manga-ocr-base)（[manga-ocr](https://github.com/kha-white/manga-ocr)） | Apache License 2.0 |
 
-授權全文見主倉的 `THIRD-PARTY-NOTICES.txt`。
+兩個模型與我們轉出來的檔案都依 **Apache License 2.0** 散布，授權全文見本倉的 [`LICENSE`](LICENSE)（官方原文）；修改內容見下一節。
 
 #### 我們自己做的修改
 
