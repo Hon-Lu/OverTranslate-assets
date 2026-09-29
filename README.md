@@ -1,13 +1,18 @@
 # OverTranslate-assets
 
 [OverTranslate](https://github.com/Hon-Lu/OverTranslate) 另外下載的資源。這些檔案太大、或只有部分使用者需要，所以不放進安裝包，
-由 app 在使用者按下載時才從這裡的 Release 取得。
+由 app 在使用者按下載時才取得。
+
+**主要來源是 Hugging Face，這裡的 Release 是備援**：app 依主倉清單的 `sources` 順序嘗試，Hugging Face 連不上、檔案雜湊不符或太慢
+（低於 256 KB/s 持續 20 秒）時才改從這裡下載。GitHub Release 的下載速度曾長期只有約 40 KB/s，所以不當主要來源。
 
 這個倉本身只放說明，檔案都在 Release 的附件裡。
 
 ## 規則
 
 - **一個 Release＝一種資源的一個版本**，tag 是「資源名-v版本」，例如 `manga-vertical-v1`。
+- **改版時三個地方一起更新**：Hugging Face 的模型倉（上傳並打新 tag `v版本`，模型卡同步）、這裡的新 Release、主倉清單的
+  `sources` 與雜湊。三處的檔名、大小、SHA-256 必須完全相同。
 - 每種資源的檔名、大小與 SHA-256 寫在主倉的清單裡（例如 `src/OverTranslate/ocrmodels/manga-vertical.json`），
   app 下載後逐檔比對，不符就重抓。**Release 上的檔案一旦發布就不要替換**；內容有任何改變就開新版本。
 - **舊版不要刪**：舊版 app 只認它自己那一版的清單與網址，只要還有人在用舊版 app，舊的 Release 就要留著。
@@ -19,6 +24,11 @@
 
 日文漫畫直排文字的偵測與辨識，在 DirectX 12 顯示卡上執行（ONNX Runtime DirectML）。沒有顯示卡或沒下載時，app 用內建的辨識。
 對應主倉清單 `manga-vertical.json` 的 `version` 為 `1`。
+
+| 來源 | 位置 |
+|---|---|
+| Hugging Face（主要） | 偵測器：[hon-lu/comic-text-and-bubble-detector-onnx-fp16](https://huggingface.co/hon-lu/comic-text-and-bubble-detector-onnx-fp16)（tag `v1`）；辨識器：[hon-lu/manga-ocr-base-onnx-fp16](https://huggingface.co/hon-lu/manga-ocr-base-onnx-fp16)（tag `v1`） |
+| GitHub（備援） | 本倉 Release `manga-vertical-v1` |
 
 | 檔案 | 大小（bytes） | SHA-256 |
 |---|---:|---|
