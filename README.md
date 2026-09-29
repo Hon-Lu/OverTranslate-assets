@@ -11,7 +11,7 @@
 - 每種資源的檔名、大小與 SHA-256 寫在主倉的清單裡（例如 `src/OverTranslate/ocrmodels/manga-vertical.json`），
   app 下載後逐檔比對，不符就重抓。**Release 上的檔案一旦發布就不要替換**；內容有任何改變就開新版本。
 - **舊版不要刪**：舊版 app 只認它自己那一版的清單與網址，只要還有人在用舊版 app，舊的 Release 就要留著。
-- app 把下載的檔案放在 `%LocalAppData%\OverTranslate-assets\<資源名>\v<版本>\`，新版下載完成後會刪掉同一資源的舊版目錄。
+- app 把下載的檔案放在 `%AppData%\OverTranslate\models\<資源名>\v<版本>\`（和設定、logs 同一個資料夾），新版下載完成後會刪掉同一資源的舊版目錄。
 
 ## 資源
 
