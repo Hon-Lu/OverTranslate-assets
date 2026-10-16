@@ -20,6 +20,42 @@
 
 ## 資源
 
+### manga-vertical-v2：漫畫直排模型
+
+偵測器與 v1 相同；辨識器改為 [muscgab/manga-ocr-base-CPT-flex](https://huggingface.co/muscgab/manga-ocr-base-CPT-flex)（從 manga-ocr-base 接續預訓練、保持長寬比讀取），錯字比 v1 少。
+對應主倉清單 `manga-vertical.json` 的 `version` 為 `2`。
+
+| 來源 | 位置 |
+|---|---|
+| Hugging Face（主要） | 偵測器：[hon-lu/comic-text-and-bubble-detector-onnx-fp16](https://huggingface.co/hon-lu/comic-text-and-bubble-detector-onnx-fp16)（tag `v1`）；辨識器：[hon-lu/manga-ocr-base-CPT-flex-onnx-fp16](https://huggingface.co/hon-lu/manga-ocr-base-CPT-flex-onnx-fp16)（tag `v1`） |
+| GitHub（備援） | 本倉 Release `manga-vertical-v2` |
+
+| 檔案 | 大小（bytes） | SHA-256 |
+|---|---:|---|
+| `detector.fp16.onnx` | 84,725,998 | `2ed2ab1f56543d9844025a87a88a96f2ff8fba1f93d5c0c89b55c0f594b29c25` |
+| `ocr-encoder.fp16.onnx` | 171,982,123 | `f86a0455d63f87d955fe56be1380762ad621ce0dc34d0e4f3e6c512e2562b418` |
+| `ocr-decoder-cross.fp16.onnx` | 4,732,209 | `f96b76dc239d49978d9167b55c58bf65fc786aa9bf3b3792f18c60aa264047ca` |
+| `ocr-decoder-step.fp16.onnx` | 56,062,492 | `3c5e51e18c4f96c0c71cc1ba0122c75067092a1ce269f703c143d3211352b4d5` |
+| `vocab.txt` | 27,001 | `a380ec969e2d73858cd84f43cdadb78b8527b12194ea4f797368ac21a24fa98c` |
+| 合計 | 317,529,823（約 303 MB） | |
+
+#### 來源與授權
+
+| 檔案 | 來源模型 | 授權 |
+|---|---|---|
+| `detector.fp16.onnx` | [ogkalu/comic-text-and-bubble-detector](https://huggingface.co/ogkalu/comic-text-and-bubble-detector)（RT-DETR-v2 r50vd） | Apache License 2.0 |
+| `ocr-*.fp16.onnx`、`vocab.txt` | [muscgab/manga-ocr-base-CPT-flex](https://huggingface.co/muscgab/manga-ocr-base-CPT-flex)（初始權重來自 [kha-white/manga-ocr-base](https://huggingface.co/kha-white/manga-ocr-base)） | **CC BY-NC-SA 4.0** |
+
+辨識器的權重**不是** Apache License 2.0：依上游以 **CC BY-NC-SA 4.0** 散布，不得商用，授權全文與上游的來源說明附在 Release 的 `LICENSE_MODEL`、`NOTICE.md`（上游原檔）。原作者同意本 app 的使用、轉檔與託管方式：[討論串](https://huggingface.co/muscgab/manga-ocr-base-CPT/discussions/1)。偵測器照舊依 Apache License 2.0（本倉 [`LICENSE`](LICENSE)）。
+
+#### 我們自己做的修改
+
+- **偵測器**：與 v1 同一個檔。
+- **辨識器**：上游權重名稱對回 Hugging Face `VisionEncoderDecoderModel` 的格式後匯出 ONNX fp16。encoder 吃保持長寬比的 patch 輸入（固定 196 個 patch，補位的 patch 以遮罩排除），decoder 拆成兩張圖：一張算 cross-attention，一張帶 key/value cache 逐步產生，並加上記憶遮罩。
+  `vocab.txt` 是 BERT 特殊 token 加上上游的 6,817 個字。
+
+匯出腳本與重做步驟在主倉 [`tools/MangaModelExport/`](https://github.com/Hon-Lu/OverTranslate/tree/main/tools/MangaModelExport)，可從上游權重逐位元重現。
+
 ### manga-vertical-v1：漫畫直排模型
 
 日文漫畫直排文字的偵測與辨識，在 DirectX 12 顯示卡上執行（ONNX Runtime DirectML）。沒有顯示卡或沒下載時，app 用內建的辨識。
